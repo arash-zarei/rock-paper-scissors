@@ -15,19 +15,21 @@ body {
   text-align: center;
   font-size: 68px;
   padding-top: 24px;
+  color: #f205c7;
 }
 
-.button {
-  padding: 8px 18px;
+.restart-button {
+  padding: 12px 32px;
   border: none;
   outline: none;
   cursor: pointer;
   background-color: #fc774e;
-  color: black;
+  color: white;
   font-size: 18px;
   border-radius: 8px;
-  filter: drop-shadow(0px 0px 8px #63666b);
+  filter: drop-shadow(0px 0px 2px #63666b);
   display: none;
+  margin: 20px auto;
 }
 
 .description {
@@ -97,7 +99,7 @@ body {
 .select-layout img {
   width: 150px;
   height: 150px;
-  margin-top: 100px;
+  margin-top: 80px;
   cursor: pointer;
   filter: drop-shadow(0px 0px 8px #63666b);
   transition: all 0.3s ease;

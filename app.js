@@ -1,34 +1,47 @@
 const buttons = document.querySelectorAll(".buttons");
 const playerSelectedImage = document.querySelector("#player-selected");
+const computerSelectedImage = document.querySelector("#computer-selected");
 const description = document.querySelector(".description");
 const showPlayerScore = document.querySelector("#player-score");
 const showComputerScore = document.querySelector("#computer-score");
-// const resetButton = document.querySelector(".button");
+const resetButton = document.querySelector(".restart-button");
 const choices = ["rock", "paper", "scissors"];
+const winningMoves = {
+  rock: "scissors",
+  paper: "rock",
+  scissors: "paper",
+};
 let playerScore = 0;
 let computerScore = 0;
 let highestScore = 0;
+let gameOver = false;
 
-// const restartHandler = () => {
-//   playerScore = 0;
-//   computerScore = 0;
-//   highestScore = 0;
-//   playGame();
-// };
+const restartHandler = () => {
+  playerScore = 0;
+  computerScore = 0;
+  highestScore = 0;
+  gameOver = false;
+  updateScore(playerScore, computerScore);
+  setTimeout(() => {
+    playGame();
+  }, 100);
+};
 
 const selectHandler = (event) => {
+  if (gameOver) return;
   const playerChoice = event.target.dataset.status;
-  playerSelectedImage.src = `${location.origin}/img/${playerChoice}.png`;
   const randomNumber = Math.floor(Math.random() * choices.length);
   const computerChoice = choices[randomNumber];
+  playerSelectedImage.src = `./img/${playerChoice}.png`;
+  computerSelectedImage.src = `./img/${computerChoice}.png`;
   const winner = checkWinner(playerChoice, computerChoice);
   calculateResult(winner);
-  showPlayerScore.innerText = `${playerScore}`;
-  showComputerScore.innerText = `${computerScore}`;
+  updateScore(playerScore, computerScore);
 
   setTimeout(() => {
     if (playerScore === highestScore || computerScore === highestScore) {
-      //   resetButton.style.display = "block";
+      resetButton.style.display = "block";
+      gameOver = true;
       playerScore === highestScore
         ? alert("Finish game, You Win!")
         : alert("Finish game, You Lose!");
@@ -42,28 +55,32 @@ const calculateResult = (winner) => {
     playerScore++;
   } else if (winner === "computer") {
     computerScore++;
-  } else {
-    alert("It's a tie.");
   }
 };
 
 const checkWinner = (player, computer) => {
-  if (player === computer) {
-    return "draw";
-  } else if (player === "rock") {
-    return computer === "paper" ? "computer" : "player";
-  } else if (player === "paper") {
-    return computer === "scissors" ? "computer" : "player";
-  } else {
-    return computer === "rock" ? "computer" : "player";
-  }
+  if (player === computer) return "draw";
+  return winningMoves[player] === computer ? "player" : "computer";
+};
+
+const updateScore = (player, computer) => {
+  showPlayerScore.innerText = player;
+  showComputerScore.innerText = computer;
 };
 
 const playGame = () => {
   if (!highestScore) {
-    highestScore = +prompt("Determine the highest score", 3) || 3;
+    while (true) {
+      const input = prompt("Determine the highest score", 3);
+      const score = Number(input);
+      if (Number.isInteger(score) && score > 0) {
+        highestScore = score;
+        break;
+      }
+      alert("Please enter a positive integer!");
+    }
   }
-  description.innerText = `First to ${highestScore} Points Wins`;
+  description.textContent = `First to ${highestScore} Points Wins`;
 };
 
 playGame();
@@ -72,4 +89,4 @@ buttons.forEach((button) => {
   button.addEventListener("click", selectHandler);
 });
 
-// resetButton.addEventListener("click", restartHandler);
+resetButton.addEventListener("click", restartHandler);
