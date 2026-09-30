@@ -22,6 +22,7 @@ const restartHandler = () => {
   highestScore = 0;
   gameOver = false;
   updateScore(playerScore, computerScore);
+  resetButton.style.display = "none";
   setTimeout(() => {
     playGame();
   }, 100);
